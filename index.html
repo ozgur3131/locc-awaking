@@ -4,20 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LOCC: Forge of Azaroth</title>
+    <script src="https://unpkg.com/@tonconnect/ui@latest/dist/tonconnect-ui.min.js"></script>
+    
     <style>
         /* --- 1. HAREKETLİ SU ALTI ARKA PLANI (SABİT) --- */
         body {
             margin: 0;
             padding: 0;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #050b14; /* En derin okyanus siyahı */
+            background-color: #050b14;
             color: #ffffff;
             min-height: 100vh;
             overflow-x: hidden;
             position: relative;
         }
 
-        /* Sabit Duran Ama İçi Dalgalanan Canlı Arka Plan */
         .su-alti-animasyon {
             position: fixed;
             top: 0;
@@ -30,7 +31,6 @@
             animation: okyanusAkisi 12s ease infinite;
         }
 
-        /* Yükselen Su Baloncukları */
         .su-alti-animasyon::after {
             content: "";
             position: absolute;
@@ -55,7 +55,7 @@
             100% { transform: translateY(-100vh); opacity: 0; }
         }
 
-        /* --- 2. PANEL VE İÇERİK TASARIMI (HAREKETLİ) --- */
+        /* --- 2. PANEL VE İÇERİK TASARIMI --- */
         .container {
             max-width: 500px;
             margin: 0 auto;
@@ -66,7 +66,8 @@
 
         h1 {
             color: #00d4ff;
-            font-size: 28px;
+            font-size: 26px;
+            margin-top: 10px;
             margin-bottom: 5px;
             text-transform: uppercase;
             letter-spacing: 2px;
@@ -75,11 +76,11 @@
 
         .subtitle {
             color: #8892b0;
-            font-size: 14px;
+            font-size: 13px;
             margin-bottom: 25px;
+            padding: 0 10px;
         }
 
-        /* Kahraman Kartları Listesi */
         .hero-list {
             display: flex;
             flex-direction: column;
@@ -87,7 +88,6 @@
             margin-bottom: 30px;
         }
 
-        /* Genel Kart Yapısı */
         .hero-card {
             background: rgba(10, 25, 47, 0.7);
             border-radius: 12px;
@@ -98,19 +98,52 @@
             text-align: left;
             position: relative;
             backdrop-filter: blur(5px);
-            transition: transform 0.2s;
+        }
+
+        /* --- 3. HAREKETLİ NFT RESİM ALANLARI (EFEKTLER) --- */
+        .hero-img-container {
+            position: relative;
+            width: 65px;
+            height: 65px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .hero-img {
-            width: 65px;
-            height: 65px;
+            width: 100%;
+            height: 100%;
             border-radius: 10px;
             background: #172a45;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 30px;
+            z-index: 2;
             box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
+            animation: cüceNefes 3s ease-in-out infinite alternate;
+        }
+
+        /* Arkadaki Hareketli Enerji Halesi (Aura) */
+        .nft-aura {
+            position: absolute;
+            width: 85%;
+            height: 85%;
+            border-radius: 50%;
+            z-index: 1;
+            filter: blur(8px);
+            animation: auraDonus 4s linear infinite;
+        }
+
+        @keyframes cüceNefes {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.05); }
+        }
+
+        @keyframes auraDonus {
+            0% { transform: rotate(0deg); opacity: 0.6; }
+            50% { opacity: 0.9; }
+            100% { transform: rotate(360deg); opacity: 0.6; }
         }
 
         .hero-info {
@@ -118,14 +151,13 @@
         }
 
         .hero-name {
-            font-size: 18px;
+            font-size: 17px;
             font-weight: bold;
             margin: 0 0 4px 0;
         }
 
-        /* Nadirlik Etiketleri ve Özel Renk Işıltıları */
         .rarity-badge {
-            font-size: 11px;
+            font-size: 10px;
             text-transform: uppercase;
             font-weight: bold;
             padding: 2px 8px;
@@ -133,53 +165,57 @@
             display: inline-block;
         }
 
-        /* 1. Sıradan */
-        .common { border: 1px solid #a0a0a0; box-shadow: 0 0 10px rgba(160,160,160,0.2); }
+        /* Nadirlik Renkleri ve Özel Animasyonlar */
+        .common { border: 1px solid #a0a0a0; }
         .common .rarity-badge { background: #5a5a5a; color: #e0e0e0; }
         .common .hero-name { color: #e0e0e0; }
+        .common .nft-aura { background: conic-gradient(#5a5a5a, #ffffff, #5a5a5a); }
 
-        /* 2. Az Bulunur */
-        .uncommon { border: 1px solid #00ffcc; box-shadow: 0 0 10px rgba(0,255,204,0.2); }
+        .uncommon { border: 1px solid #00ffcc; }
         .uncommon .rarity-badge { background: #006652; color: #00ffcc; }
         .uncommon .hero-name { color: #00ffcc; }
+        .uncommon .nft-aura { background: conic-gradient(#00ffcc, transparent, #00ffcc); }
 
-        /* 3. Nadir */
-        .rare { border: 1px solid #ff5500; box-shadow: 0 0 10px rgba(255,85,0,0.3); }
+        .rare { border: 1px solid #ff5500; }
         .rare .rarity-badge { background: #882200; color: #ffaa66; }
         .rare .hero-name { color: #ffaa66; }
+        .rare .nft-aura { background: conic-gradient(#ff5500, #ffaa66, #ff5500); animation-duration: 2.5s; }
 
-        /* 4. Epik */
-        .epic { border: 1px solid #b026ff; box-shadow: 0 0 15px rgba(176,38,255,0.4); }
+        .epic { border: 1px solid #b026ff; }
         .epic .rarity-badge { background: #550088; color: #dfa6ff; }
         .epic .hero-name { color: #dfa6ff; }
+        .epic .nft-aura { background: conic-gradient(#b026ff, #00d4ff, #b026ff); animation-duration: 2s; }
 
-        /* 5. Efsanevi (Süper Işıltılı ve Animasyonlu Parlama) */
+        /* Efsanevi Azaroth - Süper Hareketli Altın Işıltı */
         .legendary { 
             border: 1px solid #ffcc00; 
-            box-shadow: 0 0 20px rgba(255,204,0,0.5);
-            animation: efsaneviParlama 3s ease-in-out infinite alternate;
+            animation: efsaneviParlama 2s ease-in-out infinite alternate;
         }
         .legendary .rarity-badge { background: #886600; color: #ffee55; }
         .legendary .hero-name { color: #ffee55; text-shadow: 0 0 10px rgba(255,204,0,0.6); }
-
-        @keyframes efsaneviParlama {
-            0% { box-shadow: 0 0 10px rgba(255,204,0,0.4); }
-            100% { box-shadow: 0 0 25px rgba(255,204,0,0.8); border-color: #ffffff; }
+        .legendary .nft-aura { 
+            background: conic-gradient(#ffcc00, #ffffff, #ffaa00, #ffcc00); 
+            animation-duration: 1.5s;
+            filter: blur(12px);
         }
 
-        /* Cüzdan Bağlantı Butonu */
-        .wallet-btn {
-            background: linear-gradient(90deg, #00d4ff, #0076ff);
-            border: none;
-            color: white;
-            padding: 14px 28px;
-            font-size: 16px;
-            font-weight: bold;
-            border-radius: 30px;
-            cursor: pointer;
+        @keyframes efsaneviParlama {
+            0% { box-shadow: 0 0 8px rgba(255,204,0,0.3); }
+            100% { box-shadow: 0 0 22px rgba(255,204,0,0.7); border-color: #ffffff; }
+        }
+
+        /* --- 4. TON CONNECT BUTON ALANI --- */
+        #ton-connect-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 25px;
             width: 100%;
-            box-shadow: 0 4px 15px rgba(0, 212, 255, 0.4);
-            text-transform: uppercase;
+        }
+        
+        /* Kütüphanenin kendi butonunu geniş ve şık yapmak için */
+        .go2543141717 {
+            width: 100% !important;
+            justify-content: center !important;
         }
     </style>
 </head>
@@ -195,7 +231,10 @@
         <div class="hero-list">
             
             <div class="hero-card common">
-                <div class="hero-img">✊</div>
+                <div class="hero-img-container">
+                    <div class="nft-aura"></div>
+                    <div class="hero-img">✊</div>
+                </div>
                 <div class="hero-info">
                     <p class="hero-name">Valkor Demiryumruk</p>
                     <span class="rarity-badge">Sıradan</span>
@@ -203,7 +242,10 @@
             </div>
 
             <div class="hero-card uncommon">
-                <div class="hero-img">🪓</div>
+                <div class="hero-img-container">
+                    <div class="nft-aura"></div>
+                    <div class="hero-img">🪓</div>
+                </div>
                 <div class="hero-info">
                     <p class="hero-name">Beryn Buzçekici</p>
                     <span class="rarity-badge">Az Bulunur</span>
@@ -211,7 +253,10 @@
             </div>
 
             <div class="hero-card rare">
-                <div class="hero-img">🔥</div>
+                <div class="hero-img-container">
+                    <div class="nft-aura"></div>
+                    <div class="hero-img">🔥</div>
+                </div>
                 <div class="hero-info">
                     <p class="hero-name">Grendel Magmaözü</p>
                     <span class="rarity-badge">Nadir</span>
@@ -219,7 +264,10 @@
             </div>
 
             <div class="hero-card epic">
-                <div class="hero-img">⚡</div>
+                <div class="hero-img-container">
+                    <div class="nft-aura"></div>
+                    <div class="hero-img">⚡</div>
+                </div>
                 <div class="hero-info">
                     <p class="hero-name">Thrain Gökgürültüsü</p>
                     <span class="rarity-badge">Epik</span>
@@ -227,7 +275,10 @@
             </div>
 
             <div class="hero-card legendary">
-                <div class="hero-img">👑</div>
+                <div class="hero-img-container">
+                    <div class="nft-aura"></div>
+                    <div class="hero-img">👑</div>
+                </div>
                 <div class="hero-info">
                     <p class="hero-name">Azaroth: Okyanusun Kalbi</p>
                     <span class="rarity-badge">Efsanevi</span>
@@ -236,9 +287,16 @@
 
         </div>
 
-        <button class="wallet-btn" id="ton-connect-btn">TON Cüzdanını Bağla</button>
+        <div id="ton-connect-container"></div>
 
     </div>
+
+    <script>
+        const tonConnectUI = new TON_CONNECT_UI.TonConnectUI({
+            manifestUrl: 'https://locc-awaking.vercel.app/tonconnect-manifest.json',
+            buttonRootId: 'ton-connect-container'
+        });
+    </script>
 
 </body>
 </html>
