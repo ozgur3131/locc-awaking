@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LOCC AWAKING</title>
+    <script src="https://unpkg.com/@tonconnect/ui@latest/dist/tonconnect-ui.min.js"></script>
+    <style>
+        body {
+            background-color: #b73229;
+            color: #ffffff;
+            font-family: sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            height: 100vh;
+            margin: 0;
+            padding: 20px 0;
+            box-sizing: border-box;
+        }
+        .header {
+            background-color: #921d15;
+            padding: 8px 30px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 16px;
+        }
+        .main-container {
+            width: 80%;
+            height: 150px;
+            border: 2px solid #921d15;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            font-weight: 500;
+        }
+        .button-group {
+            display: flex;
+            gap: 15px;
+            font-size: 16px;
+        }
+        .nav-link {
+            text-decoration: none;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            opacity: 0.9;
+        }
+        #ton-connect-button {
+            margin: 10px 0;
+        }
+        .btn-usdt {
+            display: none;
+            background-color: #22c55e;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">zking</div>
+
+    <div id="ton-connect-button"></div>
+    
+    <button id="deposit-button" class="btn-usdt">10 USDT Yatır</button>
+
+    <div class="main-container">
+        Pinned Apps 📌
+    </div>
+
+    <div class="button-group">
+        <span class="nav-link">🔍 Search</span>
+        <span class="nav-link">🎮 Play</span>
+        <span class="nav-link">💬 Chat</span>
+        <span class="nav-link">⚙️ Settings</span>
+    </div>
+
+    <script>
+        // TON Connect Başlatma (Sabit Linke Ayarlı)
+        const tonConnectUI = new TON_CONNECT_UI.TonConnectUI({
+            manifestUrl: 'https://locc-awaking.vercel.app/tonconnect-manifest.json',
+            buttonRootId: 'ton-connect-button'
+        });
+
+        const depositBtn = document.getElementById('deposit-button');
+
+        // Cüzdan durumunu takip eden kontrol mekanizması
+        tonConnectUI.onStatusChange(wallet => {
+            if (wallet) {
+                depositBtn.style.display = 'inline-block';
+            } else {
+                depositBtn.style.display = 'none';
+            }
+        });
+
+        // USDT Gönderim Butonu İşlevi
+        depositBtn.addEventListener('click', async () => {
+            if (!tonConnectUI.connected) {
+                alert('Lütfen önce cüzdanınızı bağlayın!');
+                return;
+            }
+
+            const destinationAddress = "UQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAJKZ";
+
+            const transaction = {
+                validUntil: Math.floor(Date.now() / 1000) + 60,
+                messages: [
+                    {
+                        address: destinationAddress,
+                        amount: "10000000" // nanoTON
+                    }
+                ]
+            };
+
+            try {
+                await tonConnectUI.sendTransaction(transaction);
+                alert('İşlem cüzdana gönderildi, lütfen onaylayın.');
+            } catch (error) {
+                console.error(error);
+                alert('İşlem iptal edildi veya bir hata oluştu.');
+            }
+        });
+    </script>
+</body>
+</html>
