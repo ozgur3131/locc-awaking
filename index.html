@@ -3,135 +3,242 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LOCC AWAKING</title>
-    <script src="https://unpkg.com/@tonconnect/ui@latest/dist/tonconnect-ui.min.js"></script>
+    <title>LOCC: Forge of Azaroth</title>
     <style>
+        /* --- 1. HAREKETLİ SU ALTI ARKA PLANI (SABİT) --- */
         body {
-            background-color: #b73229;
-            color: #ffffff;
-            font-family: sans-serif;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: space-between;
-            height: 100vh;
             margin: 0;
-            padding: 20px 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #050b14; /* En derin okyanus siyahı */
+            color: #ffffff;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Sabit Duran Ama İçi Dalgalanan Canlı Arka Plan */
+        .su-alti-animasyon {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: linear-gradient(180deg, #0a192f 0%, #050c18 50%, #02060d 100%);
+            background-size: 200% 200%;
+            animation: okyanusAkisi 12s ease infinite;
+        }
+
+        /* Yükselen Su Baloncukları */
+        .su-alti-animasyon::after {
+            content: "";
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            background-image: radial-gradient(rgba(0, 212, 255, 0.1) 1px, transparent 0);
+            background-size: 40px 40px;
+            animation: baloncukYukselis 8s linear infinite;
+        }
+
+        @keyframes okyanusAkisi {
+            0% { background-position: 50% 0%; }
+            50% { background-position: 50% 100%; }
+            100% { background-position: 50% 0%; }
+        }
+
+        @keyframes baloncukYukselis {
+            0% { transform: translateY(100vh); opacity: 0; }
+            50% { opacity: 0.5; }
+            100% { transform: translateY(-100vh); opacity: 0; }
+        }
+
+        /* --- 2. PANEL VE İÇERİK TASARIMI (HAREKETLİ) --- */
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 20px;
+            text-align: center;
             box-sizing: border-box;
         }
-        .header {
-            background-color: #921d15;
-            padding: 8px 30px;
-            border-radius: 20px;
-            font-weight: bold;
-            font-size: 16px;
+
+        h1 {
+            color: #00d4ff;
+            font-size: 28px;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow: 0 0 15px rgba(0, 212, 255, 0.6);
         }
-        .main-container {
-            width: 80%;
-            height: 150px;
-            border: 2px solid #921d15;
-            border-radius: 20px;
+
+        .subtitle {
+            color: #8892b0;
+            font-size: 14px;
+            margin-bottom: 25px;
+        }
+
+        /* Kahraman Kartları Listesi */
+        .hero-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        /* Genel Kart Yapısı */
+        .hero-card {
+            background: rgba(10, 25, 47, 0.7);
+            border-radius: 12px;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            text-align: left;
+            position: relative;
+            backdrop-filter: blur(5px);
+            transition: transform 0.2s;
+        }
+
+        .hero-img {
+            width: 65px;
+            height: 65px;
+            border-radius: 10px;
+            background: #172a45;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #ffffff;
-            font-weight: 500;
+            font-size: 30px;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
         }
-        .button-group {
-            display: flex;
-            gap: 15px;
-            font-size: 16px;
+
+        .hero-info {
+            flex: 1;
         }
-        .nav-link {
-            text-decoration: none;
-            color: #ffffff;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            opacity: 0.9;
+
+        .hero-name {
+            font-size: 18px;
+            font-weight: bold;
+            margin: 0 0 4px 0;
         }
-        #ton-connect-button {
-            margin: 10px 0;
+
+        /* Nadirlik Etiketleri ve Özel Renk Işıltıları */
+        .rarity-badge {
+            font-size: 11px;
+            text-transform: uppercase;
+            font-weight: bold;
+            padding: 2px 8px;
+            border-radius: 4px;
+            display: inline-block;
         }
-        .btn-usdt {
-            display: none;
-            background-color: #22c55e;
-            color: white;
+
+        /* 1. Sıradan */
+        .common { border: 1px solid #a0a0a0; box-shadow: 0 0 10px rgba(160,160,160,0.2); }
+        .common .rarity-badge { background: #5a5a5a; color: #e0e0e0; }
+        .common .hero-name { color: #e0e0e0; }
+
+        /* 2. Az Bulunur */
+        .uncommon { border: 1px solid #00ffcc; box-shadow: 0 0 10px rgba(0,255,204,0.2); }
+        .uncommon .rarity-badge { background: #006652; color: #00ffcc; }
+        .uncommon .hero-name { color: #00ffcc; }
+
+        /* 3. Nadir */
+        .rare { border: 1px solid #ff5500; box-shadow: 0 0 10px rgba(255,85,0,0.3); }
+        .rare .rarity-badge { background: #882200; color: #ffaa66; }
+        .rare .hero-name { color: #ffaa66; }
+
+        /* 4. Epik */
+        .epic { border: 1px solid #b026ff; box-shadow: 0 0 15px rgba(176,38,255,0.4); }
+        .epic .rarity-badge { background: #550088; color: #dfa6ff; }
+        .epic .hero-name { color: #dfa6ff; }
+
+        /* 5. Efsanevi (Süper Işıltılı ve Animasyonlu Parlama) */
+        .legendary { 
+            border: 1px solid #ffcc00; 
+            box-shadow: 0 0 20px rgba(255,204,0,0.5);
+            animation: efsaneviParlama 3s ease-in-out infinite alternate;
+        }
+        .legendary .rarity-badge { background: #886600; color: #ffee55; }
+        .legendary .hero-name { color: #ffee55; text-shadow: 0 0 10px rgba(255,204,0,0.6); }
+
+        @keyframes efsaneviParlama {
+            0% { box-shadow: 0 0 10px rgba(255,204,0,0.4); }
+            100% { box-shadow: 0 0 25px rgba(255,204,0,0.8); border-color: #ffffff; }
+        }
+
+        /* Cüzdan Bağlantı Butonu */
+        .wallet-btn {
+            background: linear-gradient(90deg, #00d4ff, #0076ff);
             border: none;
-            padding: 12px 24px;
+            color: white;
+            padding: 14px 28px;
             font-size: 16px;
             font-weight: bold;
-            border-radius: 8px;
+            border-radius: 30px;
             cursor: pointer;
-            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+            width: 100%;
+            box-shadow: 0 4px 15px rgba(0, 212, 255, 0.4);
+            text-transform: uppercase;
         }
     </style>
 </head>
 <body>
 
-    <div class="header">zking</div>
+    <div class="su-alti-animasyon"></div>
 
-    <div id="ton-connect-button"></div>
-    
-    <button id="deposit-button" class="btn-usdt">10 USDT Yatır</button>
+    <div class="container">
+        
+        <h1>LOCC: Forge of Azaroth</h1>
+        <div class="subtitle">Su Altı Demirhanesine Hoş Geldiniz. Kadim Kahramanları Toplayın.</div>
 
-    <div class="main-container">
-        Pinned Apps 📌
+        <div class="hero-list">
+            
+            <div class="hero-card common">
+                <div class="hero-img">✊</div>
+                <div class="hero-info">
+                    <p class="hero-name">Valkor Demiryumruk</p>
+                    <span class="rarity-badge">Sıradan</span>
+                </div>
+            </div>
+
+            <div class="hero-card uncommon">
+                <div class="hero-img">🪓</div>
+                <div class="hero-info">
+                    <p class="hero-name">Beryn Buzçekici</p>
+                    <span class="rarity-badge">Az Bulunur</span>
+                </div>
+            </div>
+
+            <div class="hero-card rare">
+                <div class="hero-img">🔥</div>
+                <div class="hero-info">
+                    <p class="hero-name">Grendel Magmaözü</p>
+                    <span class="rarity-badge">Nadir</span>
+                </div>
+            </div>
+
+            <div class="hero-card epic">
+                <div class="hero-img">⚡</div>
+                <div class="hero-info">
+                    <p class="hero-name">Thrain Gökgürültüsü</p>
+                    <span class="rarity-badge">Epik</span>
+                </div>
+            </div>
+
+            <div class="hero-card legendary">
+                <div class="hero-img">👑</div>
+                <div class="hero-info">
+                    <p class="hero-name">Azaroth: Okyanusun Kalbi</p>
+                    <span class="rarity-badge">Efsanevi</span>
+                </div>
+            </div>
+
+        </div>
+
+        <button class="wallet-btn" id="ton-connect-btn">TON Cüzdanını Bağla</button>
+
     </div>
 
-    <div class="button-group">
-        <span class="nav-link">🔍 Search</span>
-        <span class="nav-link">🎮 Play</span>
-        <span class="nav-link">💬 Chat</span>
-        <span class="nav-link">⚙️ Settings</span>
-    </div>
-
-    <script>
-        // TON Connect Başlatma (Sabit Linke Ayarlı)
-        const tonConnectUI = new TON_CONNECT_UI.TonConnectUI({
-            manifestUrl: 'https://locc-awaking.vercel.app/tonconnect-manifest.json',
-            buttonRootId: 'ton-connect-button'
-        });
-
-        const depositBtn = document.getElementById('deposit-button');
-
-        // Cüzdan durumunu takip eden kontrol mekanizması
-        tonConnectUI.onStatusChange(wallet => {
-            if (wallet) {
-                depositBtn.style.display = 'inline-block';
-            } else {
-                depositBtn.style.display = 'none';
-            }
-        });
-
-        // USDT Gönderim Butonu İşlevi
-        depositBtn.addEventListener('click', async () => {
-            if (!tonConnectUI.connected) {
-                alert('Lütfen önce cüzdanınızı bağlayın!');
-                return;
-            }
-
-            const destinationAddress = "UQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAJKZ";
-
-            const transaction = {
-                validUntil: Math.floor(Date.now() / 1000) + 60,
-                messages: [
-                    {
-                        address: destinationAddress,
-                        amount: "10000000" // nanoTON
-                    }
-                ]
-            };
-
-            try {
-                await tonConnectUI.sendTransaction(transaction);
-                alert('İşlem cüzdana gönderildi, lütfen onaylayın.');
-            } catch (error) {
-                console.error(error);
-                alert('İşlem iptal edildi veya bir hata oluştu.');
-            }
-        });
-    </script>
 </body>
 </html>
-  
