@@ -11,7 +11,7 @@
         body {
             margin: 0;
             padding: 0;
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            font-family: 'Segoe UI', Roboto, sans-serif;
             background-color: #030712;
             color: #ffffff;
             height: 100vh;
@@ -20,7 +20,7 @@
             -webkit-user-select: none;
         }
 
-        /* --- CANLI SU ALTI DEMİRHANE ARKA PLANI --- */
+        /* --- CANLI SU ALTI ARKA PLAN --- */
         .su-alti-bg {
             position: fixed;
             top: 0;
@@ -55,17 +55,16 @@
             100% { transform: translateY(-100vh); opacity: 0; }
         }
 
-        /* --- ANA EKRAN YAPISI --- */
+        /* --- ANA UYGULAMA PANELİ --- */
         .app-container {
             display: flex;
             flex-direction: column;
             height: 100vh;
             justify-content: space-between;
             box-sizing: border-box;
-            padding-bottom: 80px; /* Alt menü için pay */
+            padding-bottom: 80px;
         }
 
-        /* Üst Durum Çubuğu */
         .top-bar {
             display: flex;
             justify-content: space-between;
@@ -82,12 +81,8 @@
             font-size: 14px;
             font-weight: bold;
             border: 1px solid rgba(0, 212, 255, 0.2);
-            display: flex;
-            align-items: center;
-            gap: 6px;
         }
 
-        /* Orta Alan (Görsel ve Sayaç) */
         .main-content {
             flex: 1;
             display: flex;
@@ -95,7 +90,6 @@
             align-items: center;
             justify-content: center;
             padding: 20px;
-            text-align: center;
         }
 
         .game-title {
@@ -104,85 +98,109 @@
             letter-spacing: 2px;
             color: #00d4ff;
             text-shadow: 0 0 15px rgba(0, 212, 255, 0.5);
-            margin: 0 0 5px 0;
+            margin: 0;
         }
 
-        /* Canlı Madencilik Havuz Alanı */
-        .forge-pool {
+        /* --- HAREKETLİ MADENCİLİK VE KAYA PARÇALAMA ALANI --- */
+        .mining-scene {
             position: relative;
-            width: 180px;
-            height: 180px;
-            margin: 20px 0;
+            width: 260px;
+            height: 260px;
+            margin: 15px 0;
             display: flex;
             align-items: center;
             justify-content: center;
         }
 
-        .forge-core {
-            font-size: 80px;
-            z-index: 2;
-            animation: orsteDovme 1s ease-in-out infinite alternate;
+        /* Ortadaki Parçalanan Kadim Kaya */
+        .ancient-rock {
+            width: 90px;
+            height: 90px;
+            background: #2e3b4e;
+            border: 3px solid #4b5e7d;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            z-index: 3;
+            box-shadow: 0 0 20px rgba(0,0,0,0.6), inset 0 0 15px rgba(0,212,255,0.2);
+            animation: kayaSarsinti 0.8s ease-in-out infinite alternate;
         }
 
-        .forge-aura {
+        /* Kıvılcım ve Kabarcık Efektleri */
+        .sparkle-effect {
             position: absolute;
-            width: 100%;
-            height: 100%;
+            width: 120px;
+            height: 120px;
+            border: 2px dashed rgba(0, 255, 204, 0.4);
             border-radius: 50%;
-            background: radial-gradient(circle, rgba(0,212,255,0.4) 0%, transparent 70%);
-            z-index: 1;
-            animation: pulsate 2s infinite;
+            z-index: 2;
+            animation: donmeEfekti 4s linear infinite;
         }
 
-        @keyframes orsteDovme {
-            0% { transform: scale(1) rotate(0deg); }
-            100% { transform: scale(1.1) rotate(-5deg); }
+        @keyframes kayaSarsinti {
+            0% { transform: scale(1) rotate(-1deg); box-shadow: 0 0 15px rgba(0,255,204,0.2); }
+            100% { transform: scale(1.04) rotate(2deg); box-shadow: 0 0 25px rgba(0,255,204,0.5); }
         }
 
-        @keyframes pulsate {
-            0% { transform: scale(0.9); opacity: 0.5; }
-            50% { transform: scale(1.2); opacity: 0.8; }
-            100% { transform: scale(0.9); opacity: 0.5; }
+        @keyframes donmeEfekti {
+            0% { transform: rotate(0deg); scale: 0.9; }
+            50% { scale: 1.1; }
+            100% { transform: rotate(360deg); scale: 0.9; }
         }
 
-        /* Biriken Ödül Paneli */
+        /* Etrafta Duran ve Kazı Yapan Cüce Karakterleri (Satın alındıkça görünür olur) */
+        .dwarf-miner {
+            position: absolute;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: #172a45;
+            border: 2px solid #00d4ff;
+            display: none; /* Varsayılan kapalı, satın alınca açılır */
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            z-index: 4;
+            animation: cüceKazim 0.6s ease-in-out infinite alternate;
+        }
+
+        /* Cücelerin Kaya Etrafındaki Koordinatları */
+        #miner-0 { top: 15px; left: 105px; border-color: #a0a0a0; }  /* Valkor */
+        #miner-1 { top: 90px; right: 15px; border-color: #00ffcc; } /* Beryn */
+        #miner-2 { bottom: 20px; right: 45px; border-color: #ff5500; } /* Grendel */
+        #miner-3 { bottom: 20px; left: 45px; border-color: #b026ff; }  /* Thrain */
+        #miner-4 { top: 90px; left: 15px; border-color: #ffcc00; }   /* Azaroth */
+
+        @keyframes cüceKazim {
+            0% { transform: translateY(0) scale(1); }
+            100% { transform: translateY(-6px) scale(1.05); }
+        }
+
+        /* --- BİRİKEN ÖDÜL PANELİ --- */
         .balance-panel {
-            background: rgba(10, 25, 47, 0.8);
-            border: 1px solid rgba(0, 212, 255, 0.2);
+            background: rgba(10, 25, 47, 0.85);
+            border: 1px solid rgba(0, 212, 255, 0.25);
             border-radius: 16px;
-            padding: 15px 30px;
-            min-width: 200px;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+            padding: 12px 25px;
+            min-width: 220px;
+            text-align: center;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.6);
         }
 
-        .balance-title {
-            font-size: 11px;
-            color: #8892b0;
-            text-transform: uppercase;
-            margin: 0;
-        }
+        .balance-title { font-size: 11px; color: #8892b0; text-transform: uppercase; margin: 0; }
+        .balance-amount { font-size: 26px; font-weight: bold; color: #ffee55; margin: 4px 0; }
+        .forge-rate { font-size: 12px; color: #00ffcc; }
 
-        .balance-amount {
-            font-size: 28px;
-            font-weight: bold;
-            color: #ffee55;
-            margin: 5px 0;
-            text-shadow: 0 0 10px rgba(255,204,0,0.4);
-        }
-
-        .forge-rate {
-            font-size: 12px;
-            color: #00ffcc;
-        }
-
-        /* --- SABİT ALT MENÜ BUTONLARI --- */
+        /* --- ALT MENÜ NAVİGASYON --- */
         .bottom-nav {
             position: fixed;
             bottom: 0;
             left: 0;
             width: 100%;
             height: 70px;
-            background: rgba(10, 25, 47, 0.9);
+            background: rgba(10, 25, 47, 0.95);
             border-top: 1px solid rgba(0, 212, 255, 0.2);
             display: flex;
             justify-content: space-around;
@@ -196,27 +214,17 @@
             flex-direction: column;
             align-items: center;
             color: #8892b0;
-            text-decoration: none;
-            font-size: 11px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: color 0.2s;
             background: none;
             border: none;
-            padding: 5px;
+            font-size: 11px;
+            cursor: pointer;
             flex: 1;
         }
 
-        .nav-item span {
-            font-size: 22px;
-            margin-bottom: 4px;
-        }
+        .nav-item span { font-size: 22px; margin-bottom: 3px; }
+        .nav-item.active, .nav-item:hover { color: #00d4ff; }
 
-        .nav-item.active, .nav-item:hover {
-            color: #00d4ff;
-        }
-
-        /* --- AÇILIR PENCERELER (MODALS) --- */
+        /* --- PENCERELER (MODALS) --- */
         .modal {
             position: fixed;
             top: 0;
@@ -229,7 +237,6 @@
             align-items: center;
             justify-content: center;
             backdrop-filter: blur(8px);
-            box-sizing: border-box;
         }
 
         .modal-content {
@@ -237,41 +244,22 @@
             border: 1px solid rgba(0, 212, 255, 0.3);
             width: 90%;
             max-width: 400px;
-            max-height: 75vh;
+            max-height: 70vh;
             border-radius: 20px;
             padding: 20px;
             position: relative;
             overflow-y: auto;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.6);
         }
 
         .close-btn {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            font-size: 22px;
-            color: #8892b0;
-            cursor: pointer;
-            background: none;
-            border: none;
+            position: absolute; top: 15px; right: 15px; font-size: 22px;
+            color: #8892b0; background: none; border: none; cursor: pointer;
         }
 
-        .modal-title {
-            font-size: 20px;
-            color: #00d4ff;
-            text-align: center;
-            margin-top: 0;
-            margin-bottom: 20px;
-            text-transform: uppercase;
-        }
+        .modal-title { font-size: 18px; color: #00d4ff; text-align: center; margin-top: 0; text-transform: uppercase; }
 
-        /* Liste Tasarımları (Pencerelerin İçi) */
-        .modal-list {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
+        /* Mağaza ve Görev Listesi */
+        .modal-list { display: flex; flex-direction: column; gap: 10px; margin-top: 15px; }
         .list-item {
             background: rgba(23, 42, 69, 0.6);
             border: 1px solid rgba(0, 212, 255, 0.1);
@@ -282,45 +270,19 @@
             justify-content: space-between;
         }
 
-        .item-detail {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .item-icon {
-            font-size: 24px;
-        }
-
-        .item-name {
-            font-weight: bold;
-            font-size: 15px;
-            margin: 0;
-        }
-
-        .item-sub {
-            font-size: 11px;
-            color: #8892b0;
-            margin: 2px 0 0 0;
-        }
+        .item-detail { display: flex; align-items: center; gap: 10px; }
+        .item-icon { font-size: 24px; width: 40px; height: 40px; background: #172a45; border-radius: 8px; display: flex; align-items: center; justify-content: center; }
+        .item-name { font-weight: bold; font-size: 14px; margin: 0; }
+        .item-sub { font-size: 11px; color: #8892b0; margin: 2px 0 0 0; }
 
         .action-btn {
             background: linear-gradient(90deg, #00d4ff, #0076ff);
-            border: none;
-            color: white;
-            padding: 8px 16px;
-            font-size: 12px;
-            font-weight: bold;
-            border-radius: 20px;
-            cursor: pointer;
+            border: none; color: white; padding: 8px 14px;
+            font-size: 12px; font-weight: bold; border-radius: 20px; cursor: pointer;
         }
+        .action-btn.owned { background: #2e3b4e; color: #8892b0; cursor: default; }
 
-        /* TON Cüzdan Yuvası */
-        #ton-wallet-placeholder {
-            display: flex;
-            justify-content: center;
-            margin: 20px 0;
-        }
+        #ton-wallet-placeholder { display: flex; justify-content: center; margin: 15px 0; }
     </style>
 </head>
 <body>
@@ -337,20 +299,21 @@
         <div class="main-content">
             <h1 class="game-title">Forge of Azaroth</h1>
             
-            <div class="forge-pool">
-                <div class="forge-aura"></div>
-                <div class="forge-core">🌋</div>
-            </div>
+            <div class="mining-scene">
+                <div class="sparkle-effect"></div>
+                <div class="ancient-rock">🌋</div>
+                
+                <div class="dwarf-miner" id="miner-0">🔱</div> <div class="dwarf-miner" id="miner-1">🔥</div> <div class="dwarf-miner" id="miner-2">🪓</div> <div class="dwarf-miner" id="miner-3">⚡</div> <div class="dwarf-miner" id="miner-4">👑</div> </div>
 
             <div class="balance-panel">
                 <p class="balance-title">BİRİKEN KADİM DEMİR</p>
-                <div class="balance-amount" id="iron-counter">777.77</div>
-                <div class="forge-rate">⚡ +4.17 / saat</div>
+                <div class="balance-amount" id="iron-counter">0.00</div>
+                <div class="forge-rate" id="forge-rate-display">⚡ +0.00 / saat</div>
             </div>
         </div>
 
         <div class="bottom-nav">
-            <button class="nav-item active" onclick="switchTab('production')"><span>⚒️</span>Üretim</button>
+            <button class="nav-item active" onclick="closeAllModals()"><span>⚒️</span>Üretim</button>
             <button class="nav-item" onclick="openModal('modal-tasks')"><span>📜</span>Görevler</button>
             <button class="nav-item" onclick="openModal('modal-shop')"><span>🏪</span>Mağaza</button>
             <button class="nav-item" onclick="openModal('modal-ref')"><span>👥</span>Referans</button>
@@ -365,23 +328,7 @@
             <h3 class="modal-title">📜 Görevler</h3>
             <div class="modal-list">
                 <div class="list-item">
-                    <div class="item-detail">
-                        <span class="item-icon">📢</span>
-                        <div>
-                            <p class="item-name">Telegram Kanalına Katıl</p>
-                            <p class="item-sub">+100 Kadim Demir</p>
-                        </div>
-                    </div>
-                    <button class="action-btn">Git</button>
-                </div>
-                <div class="list-item">
-                    <div class="item-detail">
-                        <span class="item-icon">🐦</span>
-                        <div>
-                            <p class="item-name">X (Twitter) Takip Et</p>
-                            <p class="item-sub">+150 Kadim Demir</p>
-                        </div>
-                    </div>
+                    <div class="item-detail"><div class="item-icon">📢</div><div><p class="item-name">Telegram Kanalı</p><p class="item-sub">+100 Demir</p></div></div>
                     <button class="action-btn">Git</button>
                 </div>
             </div>
@@ -391,37 +338,27 @@
     <div id="modal-shop" class="modal">
         <div class="modal-content">
             <button class="close-btn" onclick="closeModal('modal-shop')">✕</button>
-            <h3 class="modal-title">🏪 Demirci Mağazası</h3>
+            <h3 class="modal-title">🏪 Karakter Mağazası</h3>
             <div class="modal-list">
                 <div class="list-item">
-                    <div class="item-detail">
-                        <span class="item-icon">✊</span>
-                        <div>
-                            <p class="item-name">Valkor Demiryumruk</p>
-                            <p class="item-sub">Hız: +1.00 / sa</p>
-                        </div>
-                    </div>
-                    <button class="action-btn">10 TON</button>
+                    <div class="item-detail"><div class="item-icon">🔱</div><div><p class="item-name">Valkor Demiryumruk</p><p class="item-sub">+1.50 / sa</p></div></div>
+                    <button class="action-btn" id="buy-btn-0" onclick="buyDwarf(0, 1.50)">10 TON</button>
                 </div>
                 <div class="list-item">
-                    <div class="item-detail">
-                        <span class="item-icon">🪓</span>
-                        <div>
-                            <p class="item-name">Beryn Buzçekici</p>
-                            <p class="item-sub">Hız: +2.50 / sa</p>
-                        </div>
-                    </div>
-                    <button class="action-btn">25 TON</button>
+                    <div class="item-detail"><div class="item-icon">🔥</div><div><p class="item-name">Beryn Buzçekici</p><p class="item-sub">+3.00 / sa</p></div></div>
+                    <button class="action-btn" id="buy-btn-1" onclick="buyDwarf(1, 3.00)">25 TON</button>
                 </div>
                 <div class="list-item">
-                    <div class="item-detail">
-                        <span class="item-icon">👑</span>
-                        <div>
-                            <p class="item-name">Azaroth: Okyanus Kalbi</p>
-                            <p class="item-sub">Hız: +15.00 / sa</p>
-                        </div>
-                    </div>
-                    <button class="action-btn">150 TON</button>
+                    <div class="item-detail"><div class="item-icon">🪓</div><div><p class="item-name">Grendel Magmaözü</p><p class="item-sub">+6.50 / sa</p></div></div>
+                    <button class="action-btn" id="buy-btn-2" onclick="buyDwarf(2, 6.50)">50 TON</button>
+                </div>
+                <div class="list-item">
+                    <div class="item-detail"><div class="item-icon">⚡</div><div><p class="item-name">Thrain Gökgürültüsü</p><p class="item-sub">+12.00 / sa</p></div></div>
+                    <button class="action-btn" id="buy-btn-3" onclick="buyDwarf(3, 12.00)">100 TON</button>
+                </div>
+                <div class="list-item">
+                    <div class="item-detail"><div class="item-icon">👑</div><div><p class="item-name">Azaroth: Okyanus Kalbi</p><p class="item-sub">+30.00 / sa</p></div></div>
+                    <button class="action-btn" id="buy-btn-4" onclick="buyDwarf(4, 30.00)">200 TON</button>
                 </div>
             </div>
         </div>
@@ -431,10 +368,8 @@
         <div class="modal-content">
             <button class="close-btn" onclick="closeModal('modal-ref')">✕</button>
             <h3 class="modal-title">👥 Referans Sistemi</h3>
-            <p style="text-align:center; font-size:13px; color:#8892b0;">Arkadaşlarını davet et, onların her üretiminden %10 bonus kazan!</p>
-            <div style="text-align: center; margin-top: 20px;">
-                <button class="action-btn" style="padding: 12px 24px;">Davet Linkini Kopyala</button>
-            </div>
+            <p style="text-align:center; font-size:13px; color:#8892b0;">Arkadaşlarını davet et, kazançlarından %10 bonus kazan!</p>
+            <button class="action-btn" style="width:100%; margin-top:10px;">Davet Linkini Kopyala</button>
         </div>
     </div>
 
@@ -442,37 +377,80 @@
         <div class="modal-content">
             <button class="close-btn" onclick="closeModal('modal-profile')">✕</button>
             <h3 class="modal-title">👤 Oyuncu Profili</h3>
-            <p style="text-align:center; font-size:15px; margin: 0; font-weight: bold;">Azad Bayram</p>
-            <p style="text-align:center; font-size:11px; color:#8892b0; margin: 4px 0 20px 0;">ID: 6626663846</p>
-            
             <div id="ton-wallet-placeholder"></div>
         </div>
     </div>
 
     <script>
-        // 1. Canlı Sayaç Mantığı (Her saniye ödül miktarını arttırır)
-        let currentBalance = 777.77;
-        const ratePerSecond = 4.17 / 3600; // Saatlik hızı saniyeye bölüyoruz
-        
+        // 1. Tarayıcı Hafızasından (LocalStorage) Eski Verileri Yükleme
+        let balance = parseFloat(localStorage.getItem('locc_balance')) || 0.00;
+        let baseRate = parseFloat(localStorage.getItem('locc_rate')) || 0.00;
+        let ownedMiners = JSON.parse(localStorage.getItem('locc_miners')) || [false, false, false, false, false];
+
+        // 2. Oyun Başlangıç Kurulumu (Sahip olunan cüceleri ekrana basma)
+        function initGame() {
+            updateRateDisplay();
+            for(let i=0; i<ownedMiners.length; i++) {
+                if(ownedMiners[i]) {
+                    document.getElementById(`miner-${i}`).style.display = 'flex'; // Ana ekranda kazmaya başlasınlar
+                    let btn = document.getElementById(`buy-btn-${i}`);
+                    if(btn) { btn.innerText = "SAHİPSİN"; btn.classList.add('owned'); btn.disabled = true; }
+                }
+            }
+        }
+
+        // 3. Karakter Satın Alma Sistemi ve Veri Kaydı
+        function buyDwarf(index, rateBonus) {
+            if(!ownedMiners[index]) {
+                ownedMiners[index] = true;
+                baseRate += rateBonus;
+                
+                // Hafızaya kalıcı kaydetme
+                localStorage.setItem('locc_miners', JSON.stringify(ownedMiners));
+                localStorage.setItem('locc_rate', baseRate.toString());
+                
+                // Arayüzü Güncelleme
+                document.getElementById(`miner-${index}`).style.display = 'flex';
+                let btn = document.getElementById(`buy-btn-${index}`);
+                btn.innerText = "SAHİPSİN";
+                btn.classList.add('owned');
+                btn.disabled = true;
+                
+                updateRateDisplay();
+                closeModal('modal-shop');
+            }
+        }
+
+        // Kazım Hızı Göstergesini Güncelle
+        function updateRateDisplay() {
+            document.getElementById('forge-rate-display').innerText = `⚡ +${baseRate.toFixed(2)} / saat`;
+        }
+
+        // 4. Canlı Sayaç Döngüsü (Her saniye kazım yapar ve hafızayı günceller)
         setInterval(() => {
-            currentBalance += ratePerSecond;
-            document.getElementById('iron-counter').innerText = currentBalance.toFixed(2);
+            if (baseRate > 0) {
+                balance += (baseRate / 3600);
+                document.getElementById('iron-counter').innerText = balance.toFixed(2);
+                localStorage.setItem('locc_balance', balance.toString());
+            }
         }, 1000);
 
-        // 2. Pencere Açma ve Kapatma Fonksiyonları
-        function openModal(modalId) {
-            document.getElementById(modalId).style.display = 'flex';
+        // 5. Pencere Yönetimi
+        function openModal(id) { closeAllModals(); document.getElementById(id).style.display = 'flex'; }
+        function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+        function closeAllModals() {
+            const modals = document.querySelectorAll('.modal');
+            modals.forEach(m => m.style.display = 'none');
         }
 
-        function closeModal(modalId) {
-            document.getElementById(modalId).style.display = 'none';
-        }
-
-        // 3. TON Connect Entegrasyonu (Profil penceresinin içine kurulur)
+        // 6. TON Connect Kurulumu
         const tonConnectUI = new TON_CONNECT_UI.TonConnectUI({
             manifestUrl: 'https://locc-awaking.vercel.app/tonconnect-manifest.json',
             buttonRootId: 'ton-wallet-placeholder'
         });
+
+        // Oyunu Başlat
+        initGame();
     </script>
 
 </body>
