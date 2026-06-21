@@ -33,26 +33,10 @@
             animation: okyanusDalgalanma 14s ease infinite;
         }
 
-        .su-alti-bg::after {
-            content: "";
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            background-image: radial-gradient(rgba(0, 212, 255, 0.15) 1.5px, transparent 0);
-            background-size: 50px 50px;
-            animation: baloncukAkisi 10s linear infinite;
-        }
-
         @keyframes okyanusDalgalanma {
             0% { background-position: 50% 0%; }
             50% { background-position: 50% 100%; }
             100% { background-position: 50% 0%; }
-        }
-
-        @keyframes baloncukAkisi {
-            0% { transform: translateY(100vh); opacity: 0; }
-            50% { opacity: 0.6; }
-            100% { transform: translateY(-100vh); opacity: 0; }
         }
 
         /* --- ANA PANEL --- */
@@ -112,80 +96,89 @@
             justify-content: center;
         }
 
+        /* Ortadaki Kadim Merkez Kaya */
         .ancient-rock {
             width: 90px;
             height: 90px;
-            background: #2e3b4e;
-            border: 3px solid #4b5e7d;
-            border-radius: 15px;
+            background: radial-gradient(circle, #4b5e7d 0%, #2e3b4e 100%);
+            border: 3px solid #00d4ff;
+            border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 36px;
+            font-size: 28px;
             z-index: 3;
-            box-shadow: 0 0 20px rgba(0,0,0,0.6), inset 0 0 15px rgba(0,212,255,0.2);
+            box-shadow: 0 0 25px rgba(0, 212, 255, 0.4), inset 0 0 15px rgba(0,212,255,0.3);
             animation: kayaSarsinti 0.8s ease-in-out infinite alternate;
         }
 
         .sparkle-effect {
             position: absolute;
-            width: 120px;
-            height: 120px;
-            border: 2px dashed rgba(0, 255, 204, 0.4);
+            width: 130px;
+            height: 130px;
+            border: 2px dashed rgba(0, 255, 204, 0.3);
             border-radius: 50%;
             z-index: 2;
-            animation: donmeEfekti 4s linear infinite;
+            animation: donmeEfekti 5s linear infinite;
         }
 
         @keyframes kayaSarsinti {
-            0% { transform: scale(1) rotate(-1deg); }
-            100% { transform: scale(1.04) rotate(2deg); }
+            0% { transform: scale(1); box-shadow: 0 0 20px rgba(0, 212, 255, 0.4); }
+            100% { transform: scale(1.05); box-shadow: 0 0 30px rgba(0, 255, 204, 0.6); }
         }
 
         @keyframes donmeEfekti {
-            0% { transform: rotate(0deg); scale: 0.9; }
-            100% { transform: rotate(360deg); scale: 0.9; }
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
 
-        /* Cüce Karakterleri */
+        /* --- PARILDAYAN YENİ CÜCE KRİSTALLERİ (KESİN ÇÖZÜM) --- */
         .dwarf-miner {
             position: absolute;
-            width: 45px;
-            height: 45px;
+            width: 44px;
+            height: 44px;
             border-radius: 50%;
-            background: #172a45;
-            border: 2px solid #00d4ff;
-            display: none;
+            display: none; /* JS en az 1 adet olunca açacak */
             align-items: center;
             justify-content: center;
-            font-size: 20px;
             z-index: 4;
-            animation: cüceKazim 0.6s ease-in-out infinite alternate;
+            animation: cüceYuzme 1.5s ease-in-out infinite alternate;
+            box-shadow: 0 0 15px rgba(255,255,255,0.2);
         }
 
-        /* Üstlerindeki Adet Rozeti */
+        /* Her Cüceye Özel Parlayan Sihirli Küre Efektleri */
+        #miner-0 { top: 15px; left: 108px; background: radial-gradient(circle, #ffffff 0%, #718096 100%); border: 3px solid #cbd5e0; box-shadow: 0 0 20px #718096; animation-delay: 0s; }
+        #miner-1 { top: 90px; right: 15px; background: radial-gradient(circle, #ff9999 0%, #ff0000 100%); border: 3px solid #ff4d4d; box-shadow: 0 0 20px #ff0000; animation-delay: 0.3s; }
+        #miner-2 { bottom: 20px; right: 45px; background: radial-gradient(circle, #ffcc99 0%, #ff6600 100%); border: 3px solid #ff944d; box-shadow: 0 0 20px #ff6600; animation-delay: 0.6s; }
+        #miner-3 { bottom: 20px; left: 45px; background: radial-gradient(circle, #e199ff 0%, #8000ff 100%); border: 3px solid #b34dff; box-shadow: 0 0 20px #8000ff; animation-delay: 0.9s; }
+        #miner-4 { top: 90px; left: 15px; background: radial-gradient(circle, #ffff99 0%, #d4af37 100%); border: 3px solid #ffee55; box-shadow: 0 0 25px #d4af37; animation-delay: 1.2s; }
+
+        /* Kristal Kürelerin İçindeki Kahraman Baş Harfleri */
+        .miner-text {
+            font-size: 14px;
+            font-weight: 900;
+            color: #030712;
+            text-shadow: 0 1px 2px rgba(255,255,255,0.6);
+        }
+
+        /* Üstlerindeki Parlayan Adet Rozeti */
         .dwarf-count-badge {
             position: absolute;
-            bottom: -5px;
-            right: -5px;
+            bottom: -6px;
+            right: -6px;
             background: #ffee55;
             color: #030712;
             font-size: 10px;
             font-weight: bold;
-            padding: 1px 5px;
-            border-radius: 8px;
+            padding: 2px 6px;
+            border-radius: 10px;
             border: 1px solid #030712;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.5);
         }
 
-        #miner-0 { top: 15px; left: 105px; border-color: #a0a0a0; }
-        #miner-1 { top: 90px; right: 15px; border-color: #00ffcc; }
-        #miner-2 { bottom: 20px; right: 45px; border-color: #ff5500; }
-        #miner-3 { bottom: 20px; left: 45px; border-color: #b026ff; }
-        #miner-4 { top: 90px; left: 15px; border-color: #ffcc00; }
-
-        @keyframes cüceKazim {
-            0% { transform: translateY(0); }
-            100% { transform: translateY(-6px); }
+        @keyframes cüceYuzme {
+            0% { transform: translateY(0) scale(1); }
+            100% { transform: translateY(-8px) scale(1.03); }
         }
 
         /* --- SAYAÇ PANELİ --- */
@@ -280,7 +273,7 @@
         }
 
         .item-detail { display: flex; align-items: center; gap: 10px; }
-        .item-icon { font-size: 24px; width: 40px; height: 40px; background: #172a45; border-radius: 8px; display: flex; align-items: center; justify-content: center; position: relative; }
+        .item-icon { font-size: 14px; font-weight: bold; width: 40px; height: 40px; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #030712; }
         .item-name { font-weight: bold; font-size: 14px; margin: 0; }
         .item-sub { font-size: 11px; color: #8892b0; margin: 2px 0 0 0; }
         
@@ -295,9 +288,7 @@
             background: linear-gradient(90deg, #00d4ff, #0076ff);
             border: none; color: white; padding: 8px 14px;
             font-size: 12px; font-weight: bold; border-radius: 20px; cursor: pointer;
-            transition: transform 0.1s;
         }
-        .action-btn:active { transform: scale(0.95); }
 
         #ton-wallet-placeholder { display: flex; justify-content: center; margin: 15px 0; }
     </style>
@@ -318,13 +309,13 @@
             
             <div class="mining-scene">
                 <div class="sparkle-effect"></div>
-                <div class="ancient-rock">🌋</div>
+                <div class="ancient-rock">⚒️</div>
                 
-                <div class="dwarf-miner" id="miner-0">🔱<span class="dwarf-count-badge" id="badge-0">x1</span></div>
-                <div class="dwarf-miner" id="miner-1">🔥<span class="dwarf-count-badge" id="badge-1">x0</span></div>
-                <div class="dwarf-miner" id="miner-2">🪓<span class="dwarf-count-badge" id="badge-2">x0</span></div>
-                <div class="dwarf-miner" id="miner-3">⚡<span class="dwarf-count-badge" id="badge-3">x0</span></div>
-                <div class="dwarf-miner" id="miner-4">👑<span class="dwarf-count-badge" id="badge-4">x0</span></div>
+                <div class="dwarf-miner" id="miner-0"><span class="miner-text">V</span><span class="dwarf-count-badge" id="badge-0">x1</span></div>
+                <div class="dwarf-miner" id="miner-1"><span class="miner-text">B</span><span class="dwarf-count-badge" id="badge-1">x0</span></div>
+                <div class="dwarf-miner" id="miner-2"><span class="miner-text">G</span><span class="dwarf-count-badge" id="badge-2">x0</span></div>
+                <div class="dwarf-miner" id="miner-3"><span class="miner-text">T</span><span class="dwarf-count-badge" id="badge-3">x0</span></div>
+                <div class="dwarf-miner" id="miner-4"><span class="miner-text">A</span><span class="dwarf-count-badge" id="badge-4">x0</span></div>
             </div>
 
             <div class="balance-panel">
@@ -350,7 +341,7 @@
             <h3 class="modal-title">📜 Görevler</h3>
             <div class="modal-list">
                 <div class="list-item">
-                    <div class="item-detail"><div class="item-icon">📢</div><div><p class="item-name">Telegram Kanalı</p><p class="item-sub">+100 Demir</p></div></div>
+                    <div class="item-detail"><div class="item-icon" style="background:#00d4ff;">📢</div><div><p class="item-name">Telegram Kanalı</p><p class="item-sub">+100 Demir</p></div></div>
                     <button class="action-btn">Git</button>
                 </div>
             </div>
@@ -364,7 +355,7 @@
             <div class="modal-list">
                 <div class="list-item">
                     <div class="item-detail">
-                        <div class="item-icon">🔱</div>
+                        <div class="item-icon" style="background:#cbd5e0;">V</div>
                         <div>
                             <p class="item-name">Valkor Demiryumruk</p>
                             <p class="item-sub">+1.50 / sa</p>
@@ -375,7 +366,7 @@
                 </div>
                 <div class="list-item">
                     <div class="item-detail">
-                        <div class="item-icon">🔥</div>
+                        <div class="item-icon" style="background:#ff4d4d;">B</div>
                         <div>
                             <p class="item-name">Beryn Buzçekici</p>
                             <p class="item-sub">+3.00 / sa</p>
@@ -386,7 +377,7 @@
                 </div>
                 <div class="list-item">
                     <div class="item-detail">
-                        <div class="item-icon">🪓</div>
+                        <div class="item-icon" style="background:#ff944d;">G</div>
                         <div>
                             <p class="item-name">Grendel Magmaözü</p>
                             <p class="item-sub">+6.50 / sa</p>
@@ -397,7 +388,7 @@
                 </div>
                 <div class="list-item">
                     <div class="item-detail">
-                        <div class="item-icon">⚡</div>
+                        <div class="item-icon" style="background:#b34dff;">T</div>
                         <div>
                             <p class="item-name">Thrain Gökgürültüsü</p>
                             <p class="item-sub">+12.00 / sa</p>
@@ -408,7 +399,7 @@
                 </div>
                 <div class="list-item">
                     <div class="item-detail">
-                        <div class="item-icon">👑</div>
+                        <div class="item-icon" style="background:#ffee55;">A</div>
                         <div>
                             <p class="item-name">Azaroth: Okyanus Kalbi</p>
                             <p class="item-sub">+30.00 / sa</p>
@@ -439,12 +430,10 @@
     </div>
 
     <script>
-        // Sınırsız Sayıda Alım İçin Sayısal Dizi Mantığı (Valkor ilk başta 1 adet verilir)
         let balance = parseFloat(localStorage.getItem('locc_balance')) || 0.00;
         let baseRate = parseFloat(localStorage.getItem('locc_rate')) || 1.50; 
         let dwarfCounts = JSON.parse(localStorage.getItem('locc_dwarf_counts')) || [1, 0, 0, 0, 0];
 
-        // Oyunu ve Hafızadaki Adetleri Yükleme
         function initGame() {
             updateRateDisplay();
             for(let i=0; i<dwarfCounts.length; i++) {
@@ -452,23 +441,18 @@
             }
         }
 
-        // Sınırsız Satın Alma Fonksiyonu
         function buyDwarf(index, rateBonus) {
-            // Adedi arttır ve hızı ekle
             dwarfCounts[index] += 1;
             baseRate += rateBonus;
             
-            // Verileri hafızaya kilitle
             localStorage.setItem('locc_dwarf_counts', JSON.stringify(dwarfCounts));
             localStorage.setItem('locc_rate', baseRate.toString());
             
-            // Ekran arayüzünü anlık güncelle
             updateDwarfUI(index);
             updateRateDisplay();
             closeModal('modal-shop');
         }
 
-        // Cücelerin Ekrandaki ve Mağazadaki Sayılarını Tazeleyen Fonksiyon
         function updateDwarfUI(index) {
             let count = dwarfCounts[index];
             let minerDiv = document.getElementById(`miner-${index}`);
@@ -476,8 +460,8 @@
             let shopCountDiv = document.getElementById(`shop-count-${index}`);
 
             if(count > 0) {
-                minerDiv.style.display = 'flex'; // En az 1 tane varsa ana ekranda çalışsınlar
-                badgeSpan.innerText = `x${count}`; // Sayısını üstüne yaz
+                minerDiv.style.display = 'flex'; // En az 1 tane varsa görünür olur
+                badgeSpan.innerText = `x${count}`;
             } else {
                 minerDiv.style.display = 'none';
             }
@@ -506,7 +490,6 @@
             document.querySelectorAll('.modal').forEach(m => m.style.display = 'none');
         }
 
-        // TON Connect Bağlantısı
         const tonConnectUI = new TON_CONNECT_UI.TonConnectUI({
             manifestUrl: 'https://locc-awaking.vercel.app/tonconnect-manifest.json',
             buttonRootId: 'ton-wallet-placeholder'
