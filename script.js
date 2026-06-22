@@ -10,6 +10,24 @@ document.addEventListener('DOMContentLoaded', () => {
     const ironCounterEl = document.getElementById('iron-counter');
     const energyTextEl = document.getElementById('energy-text');
     const forgeBtn = document.getElementById('forge-click-btn');
+    const bgVideo = document.getElementById('bg-video');
+
+    // 🎥 VİDEO OYNATMA ZORLAMA SİSTEMİ
+    if (bgVideo) {
+        // Tarayıcı izin verirse hemen oynatmayı dene
+        bgVideo.play().catch(error => {
+            console.log("Tarayıcı otomatik oynatmayı engelledi, tıklama bekleniyor.");
+        });
+
+        // KULLANICI ETKİLEŞİMİ YAKALAYICI:
+        // Oyuncu ekranda herhangi bir yere dokunduğu an video arkada oynamaya başlar.
+        // Mobil tarayıcıların korumasını kırmanın en kesin yolu budur.
+        document.body.addEventListener('click', () => {
+            if (bgVideo.paused) {
+                bgVideo.play().catch(err => console.log("Video başlatılamadı:", err));
+            }
+        }, { once: true }); // Bu kontrol sadece ilk dokunuşta bir kez çalışır
+    }
 
     // Ekranı Güncelleyen Fonksiyon
     function updateUI() {
