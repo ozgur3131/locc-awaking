@@ -3,95 +3,249 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Forge of Azeroth - Mini App</title>
-    <link rel="stylesheet" href="style.css">
+    <title>RPG Telegram Game</title>
+    <!-- Telegram Web App API -->
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <script src="https://unpkg.com/@tonconnect/ui@latest/dist/tonconnect-ui.min.js"></script>
+    <style>
+        :root {
+            --bg-color: #121016;
+            --panel-bg: #1e1b26;
+            --accent: #8b5cf6;
+            --text-main: #ffffff;
+            --text-muted: #a09dab;
+            --hp-bar: #ef4444;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
+            user-select: none;
+        }
+
+        /* Üst Bilgi Çubuğu */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            background-color: var(--panel-bg);
+            border-bottom: 1px solid #333;
+        }
+
+        .player-info { display: flex; flex-direction: column; }
+        .player-name { font-weight: bold; font-size: 1.1rem; }
+        .player-level { font-size: 0.8rem; color: var(--text-muted); }
+
+        .currency {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-weight: bold;
+            color: #fbbf24;
+        }
+
+        /* Ana Savaş Alanı */
+        .battle-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .boss-name { font-size: 1.5rem; margin-bottom: 10px; color: #fca5a5; }
+        
+        .boss-image {
+            width: 150px;
+            height: 150px;
+            background: radial-gradient(circle, #4c1d95 0%, #121016 70%);
+            border-radius: 50%;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        /* Can Barı */
+        .hp-container {
+            width: 100%;
+            max-width: 300px;
+            background-color: #333;
+            border-radius: 10px;
+            height: 20px;
+            position: relative;
+            overflow: hidden;
+            border: 2px solid #555;
+        }
+
+        .hp-bar {
+            height: 100%;
+            background-color: var(--hp-bar);
+            width: 100%;
+            transition: width 0.2s ease-out;
+        }
+
+        .hp-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 0.8rem;
+            font-weight: bold;
+            text-shadow: 1px 1px 2px black;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            width: 100%;
+            margin-top: 20px;
+            background-color: var(--panel-bg);
+            padding: 10px;
+            border-radius: 10px;
+        }
+
+        .stat-box { display: flex; flex-direction: column; font-size: 0.9rem; }
+        .stat-title { color: var(--text-muted); font-size: 0.7rem; }
+        .stat-value { font-weight: bold; color: var(--text-main); }
+
+        /* Alt Menü */
+        .bottom-nav {
+            display: flex;
+            justify-content: space-around;
+            padding: 15px 0;
+            background-color: var(--panel-bg);
+            border-top: 1px solid #333;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            cursor: pointer;
+        }
+
+        .nav-item.active { color: var(--accent); }
+    </style>
 </head>
 <body>
 
-    <div class="video-background">
-        <video autoplay muted loop playsinline id="bg-video">
-            <source src="71686.mp4" type="video/mp4">
-        </video>
-        <div class="video-overlay"></div>
+    <!-- Üst Bar -->
+    <div class="header">
+        <div class="player-info">
+            <span class="player-name" id="playerName">Oyuncu</span>
+            <span class="player-level">Aşama: 157</span>
+        </div>
+        <div class="currency">
+            <span>🪙</span>
+            <span id="coinBalance">34.00</span>
+        </div>
     </div>
 
-    <div class="game-container">
+    <!-- Savaş Alanı -->
+    <div class="battle-area">
+        <div class="boss-name">🔥 KINDRAL 🔥</div>
+        <div class="boss-image">👹</div>
         
-        <header class="header-bar">
-            <div class="stat-badge energy">
-                <span class="icon">🔋</span>
-                <span id="energy-text">100/100</span>
+        <div class="hp-container">
+            <div class="hp-bar" id="hpBar"></div>
+            <div class="hp-text" id="hpText">1,800,000 / 1,800,000 HP</div>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-box">
+                <span class="stat-title">DPS</span>
+                <span class="stat-value" id="dpsValue">1,326</span>
             </div>
-            
-            <div id="ton-connect"></div>
-
-            <div class="stat-badge diamond">
-                <span class="icon">💎</span>
-                <span id="diamond-text">0.00</span>
+            <div class="stat-box">
+                <span class="stat-title">BONUS</span>
+                <span class="stat-value">+ 2%</span>
             </div>
-        </header>
-
-        <h1 class="game-title">FORGE OF AZEROTH</h1>
-
-        <main class="forge-area">
-            <div class="orbit-container">
-                <button class="center-forge-btn" id="forge-click-btn">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#ff9900" class="hammer-icon">
-                        <path d="M21.58 12.38l-1.96-1.96c-.39-.39-1.02-.39-1.41 0l-1.57 1.57-2.67-2.67 1.57-1.57c.39-.39.39-1.02 0-1.41L13.58 4.38c-.39-.39-1.02-.39-1.41 0l-1.96 1.96c-.39.39-.39 1.02 0 1.41l1.57 1.57-7.85 7.85c-.39.39-.39 1.02 0 1.41l1.96 1.96c.39.39 1.02.39 1.41 0l7.85-7.85 1.57 1.57c.39.39 1.02.39 1.41 0l1.96-1.96c.4-.39.4-1.03 0-1.42z"/>
-                    </svg>
-                </button>
-
-                <div class="node node-v">V <span class="multiplier">x3</span></div>
-                <div class="node node-b">B <span class="multiplier">x2</span></div>
-                <div class="node node-g">G <span class="multiplier">x2</span></div>
-                <div class="node node-t">T <span class="multiplier">x4</span></div>
-                <div class="node node-a">A <span class="multiplier">x7</span></div>
+            <div class="stat-box">
+                <span class="stat-title">ÖDÜL</span>
+                <span class="stat-value">🪙 100</span>
             </div>
-        </main>
-
-        <section class="mining-stats-box">
-            <p class="stats-label">BİRİKEN KADİM DEMİR</p>
-            <h2 class="stats-counter" id="iron-counter">41.05</h2>
-            <p class="stats-speed">⚡ +333.00 / saat</p>
-        </section>
-
-        <footer class="bottom-nav">
-            <button class="nav-item active">
-                <span class="nav-icon">⚒️</span>
-                <span class="nav-text">Üretim</span>
-            </button>
-            <button class="nav-item">
-                <span class="nav-icon">📜</span>
-                <span class="nav-text">Görevler</span>
-            </button>
-            <button class="nav-item">
-                <span class="nav-icon">🏪</span>
-                <span class="nav-text">Mağaza</span>
-            </button>
-            <button class="nav-item">
-                <span class="nav-icon">👥</span>
-                <span class="nav-text">Referans</span>
-            </button>
-            <button class="nav-item">
-                <span class="nav-icon">👤</span>
-                <span class="nav-text">Profil</span>
-            </button>
-        </footer>
-
+        </div>
     </div>
 
-    <script src="script.js"></script>
-    
+    <!-- Alt Menü -->
+    <div class="bottom-nav">
+        <div class="nav-item">Koleksiyon</div>
+        <div class="nav-item">Arkadaşlar</div>
+        <div class="nav-item active">Savaş</div>
+        <div class="nav-item">Pazar</div>
+        <div class="nav-item">Cüzdan</div>
+    </div>
+
     <script>
-        // Hata vermemesi için TON_CONNECT_UI kontrol edilerek cüzdan başlatılıyor
-        if (typeof TON_CONNECT_UI !== 'undefined') {
-            const tonConnectUI = new TON_CONNECT_UI.TonConnectUI({
-                manifestUrl: window.location.origin + '/tonconnect-manifest.json',
-                buttonRootId: 'ton-connect'
-            });
+        // Telegram Web App Başlatma
+        const tg = window.Telegram.WebApp;
+        tg.expand(); // Uygulamayı tam ekran yap
+
+        // Kullanıcı adını Telegram'dan çekme
+        if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
+            document.getElementById("playerName").innerText = tg.initDataUnsafe.user.first_name;
+        } else {
+            document.getElementById("playerName").innerText = "Ayşe"; // Telegram dışında açılırsa
         }
+
+        // Oyun Değişkenleri
+        let maxHp = 1800000;
+        let currentHp = 1800000;
+        let dps = 1326;
+        let coins = 34.00;
+
+        // Arayüz Elementleri
+        const hpBar = document.getElementById("hpBar");
+        const hpText = document.getElementById("hpText");
+        const coinBalance = document.getElementById("coinBalance");
+
+        // Sayı formatlayıcı (Örn: 1800000 -> 1,800,000)
+        function formatNumber(num) {
+            return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+
+        // Oyun Döngüsü (Her saniye hasar vur ve altın kazan)
+        setInterval(() => {
+            // Can düşürme
+            currentHp -= dps;
+            if (currentHp <= 0) {
+                currentHp = maxHp; // Canavar ölünce yenisi gelir
+                coins += 100; // Öldürme ödülü
+                tg.HapticFeedback.notificationOccurred("success"); // Titreşim
+            }
+
+            // Altın kazanımı (Saniye başı ufak bir miktar)
+            coins += (dps * 0.0001);
+
+            // Arayüzü Güncelle
+            let hpPercentage = (currentHp / maxHp) * 100;
+            hpBar.style.width = hpPercentage + "%";
+            hpText.innerText = `${formatNumber(Math.floor(currentHp))} / ${formatNumber(maxHp)} HP`;
+            coinBalance.innerText = coins.toFixed(2);
+
+        }, 1000); // 1000ms = 1 saniye
+
     </script>
 </body>
 </html>
