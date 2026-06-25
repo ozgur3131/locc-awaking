@@ -244,3 +244,13 @@ body {
 .nav-item.active {
     color: #00f5d4;
 }
+.bg-video {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    object-fit: cover;
+    z-index: -1; /* Videonun arka planda kalmasını sağlar */
+    opacity: 0.6; /* İsteğe bağlı: Yazıların daha net okunması için videoyu hafif karartır */
+}
