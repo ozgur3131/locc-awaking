@@ -127,3 +127,137 @@
 <video id="arena-video" class="bg-video" autoplay loop muted playsinline style="display: none;">
     <source src="_seed2604850311.mp4" type="video/mp4">
 </video>
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Raff - Web3 Game</title>
+    <link rel="stylesheet" href="stil.css">
+</head>
+<body>
+
+    <video id="video-genel" class="arka-plan-video" autoplay loop muted playsinline>
+        <source src="71686.mp4" type="video/mp4">
+    </video>
+    
+    <video id="video-savas" class="arka-plan-video" autoplay loop muted playsinline style="display: none;">
+        <source src="_seed2604850311.mp4" type="video/mp4">
+    </video>
+
+    <header class="ust-bar">
+        <div class="sol-taraf">
+            <h1 class="logo">Raff</h1>
+            <div class="bakiye-kutu">
+                <span class="bakiye-simge">💰</span>
+                <span id="kullanici-bakiye">0.00</span> <span class="bakiye-birim">USDT</span>
+            </div>
+        </div>
+        <button class="cuzdan-buton" id="btn-connect">
+            <span class="cuzdan-simge">💎</span> Connect Wallet
+        </button>
+    </header>
+
+    <main class="icerik-alani">
+
+        <section id="sekme-savas" class="sekme-icerik aktif">
+            <div class="arena-mesaj-kutusu">
+                <p class="arena-metin">⚔️ Savaş Arenası Yakında Sizlerle!</p>
+            </div>
+        </section>
+
+        <section id="sekme-pazar" class="sekme-icerik">
+            <div class="pazar-konteyner">
+                <h2 class="bolum-basligi">Yatırım Paketleri</h2>
+                
+                <div class="paket-kart ucretsiz-kart">
+                    <div class="paket-rozet">HEDİYE</div>
+                    <h3>🎁 Başlangıç Paketi</h3>
+                    <div class="paket-detaylar">
+                        <p><strong>Fiyat:</strong> 0 USDT</p>
+                        <p><strong>Süre:</strong> 50 Gün</p>
+                        <p><strong>Toplam Getiri:</strong> 2.00 USDT</p>
+                    </div>
+                    <button class="satinal-btn free" onclick="paketSatinAl('free', 0)">Ücretsiz Aktif Et</button>
+                </div>
+
+                <div class="paket-kart premium-kart">
+                    <div class="paket-rozet populer">%3 GÜNLÜK</div>
+                    <h3>⚔️ Savaşçı Paketi</h3>
+                    <div class="paket-detaylar">
+                        <p><strong>Fiyat:</strong> 10.00 USDT</p>
+                        <p><strong>Günlük Kazanç:</strong> %3 (0.30 USDT)</p>
+                        <p><strong>Süre:</strong> 50 Gün Sınırlı</p>
+                        <p><strong>Toplam Kazanç:</strong> 15.00 USDT</p>
+                    </div>
+                    <button class="satinal-btn" onclick="paketSatinAl('premium10', 10)">10 USDT ile Satın Al</button>
+                </div>
+            </div>
+        </section>
+
+        <section id="sekme-cuzdan" class="sekme-icerik">
+            <div class="cuzdan-konteyner">
+                <h2 class="bolum-basligi">Cüzdan Bilgileri</h2>
+                <div class="bilgi-kart">
+                    <p>Bakiye: <strong class="vurgu">0.00 USDT</strong></p>
+                    <p>Bağlı Cüzdan: <span id="cuzdan-adres" class="soluk-metin">Cüzdan Bağlı Değil</span></p>
+                </div>
+                <button class="islem-btn" onclick="alert('Cüzdan bağlantısı yapıldıktan sonra çekim aktif olacaktır.')">Para Çek (Withdraw)</button>
+            </div>
+        </section>
+
+        <section id="sekme-arkadas" class="sekme-icerik">
+            <div class="ref-konteyner">
+                <h2 class="bolum-basligi">👥 Arkadaşlarını Davet Et</h2>
+                
+                <div class="kullanici-bilgi-kutu">
+                    <p>Kullanıcı Adınız: <span id="kullanici-adi" class="vurgu-altin">Kullanici_7824</span></p>
+                </div>
+
+                <div class="link-kopyala-kutu">
+                    <label for="ref-link">Sizin Davet Linkiniz:</label>
+                    <div class="input-grup">
+                        <input type="text" id="ref-link" value="https://vaking.vercel.app/?ref=Kullanici_7824" readonly>
+                        <button class="kopyala-btn" onclick="linkKopyala()">Kopyala</button>
+                    </div>
+                </div>
+
+                <div class="odul-sistemi-kart">
+                    <h3>🏆 Referans Kazanç Sistemi</h3>
+                    <div class="odul-satir">
+                        <span class="seviye">Seviye 1 (Doğrudan Davet):</span>
+                        <span class="yuzde">%7 Ödül</span>
+                    </div>
+                    <div class="odul-satir">
+                        <span class="seviye">Seviye 2 (Arkadaşının Daveti):</span>
+                        <span class="yuzde">%3 Ödül</span>
+                    </div>
+                    <p class="ref-not">* Arkadaşlarınız yatırım yaptığında ödülleriniz anında cüzdan bakiyenize eklenir.</p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <nav class="alt-nav">
+        <button class="nav-buton aktif" onclick="sekmeDegistir('savas')">
+            <span class="nav-ikon">⚔️</span>
+            <span class="nav-metin">Savaş</span>
+        </button>
+        <button class="nav-buton" onclick="sekmeDegistir('pazar')">
+            <span class="nav-ikon">🛒</span>
+            <span class="nav-metin">Pazar</span>
+        </button>
+        <button class="nav-buton" onclick="sekmeDegistir('cuzdan')">
+            <span class="nav-ikon">💼</span>
+            <span class="nav-metin">Cüzdan</span>
+        </button>
+        <button class="nav-buton" onclick="sekmeDegistir('arkadas')">
+            <span class="nav-ikon">👥</span>
+            <span class="nav-metin">Arkadaşlar</span>
+        </button>
+    </nav>
+
+    <script src="script.js"></script>
+</body>
+</html>
