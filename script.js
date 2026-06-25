@@ -103,3 +103,85 @@ function withdrawUSDT() {
         alert("Çekim talebiniz işleme alınmıştır. En kısa sürede cüzdanınıza transfer edilecektir.");
     }
 }
+// SEKME DEĞİŞTİRME FONKSİYONU
+function sekmeDegistir(sekmeAdi) {
+    // Tüm sekmeleri gizle
+    const sekmeler = document.querySelectorAll('.sekme-icerik');
+    sekmeler.forEach(sekme => {
+        sekme.classList.remove('aktif');
+    });
+
+    // Tüm nav butonlarının aktifliğini kaldır
+    const butonlar = document.querySelectorAll('.nav-buton');
+    butonlar.forEach(btn => {
+        btn.classList.remove('aktif');
+    });
+
+    // Seçilen sekmeyi aktif et
+    const aktifSekme = document.getElementById(`sekme-${sekmeAdi}`);
+    if (aktifSekme) {
+        aktifSekme.classList.add('aktif');
+    }
+
+    // Tıklanan butonu aktif göster (Navigasyon çubuğundaki yer tespiti için)
+    const tiklananButon = event.currentTarget;
+    if (tiklananButon) {
+        tiklananButon.classList.add('aktif');
+    }
+
+    // VİDEO YÖNETİMİ
+    // "Savaş" sekmesindeysek savaş videosunu aç, diğerlerinde ana genel videoyu çalıştır
+    const videoGenel = document.getElementById('video-genel');
+    const videoSavas = document.getElementById('video-savas');
+
+    if (sekmeAdi === 'savas') {
+        videoGenel.style.display = 'none';
+        videoSavas.style.display = 'block';
+    } else {
+        videoGenel.style.display = 'block';
+        videoSavas.style.display = 'none';
+    }
+}
+
+// PAKET SATIN ALMA SİMÜLASYONU
+function paketSatinAl(paketTipi, maliyet) {
+    if (paketTipi === 'free') {
+        alert("🎁 Başlangıç Paketi (Hediye) başarıyla aktif edildi!\n50 gün boyunca toplam 2 USDT kazanç sağlayacaksınız.");
+    } else if (paketTipi === 'premium10') {
+        const onay = confirm("⚔️ Savaşçı Paketini 10 USDT karşılığında almak istiyor musunuz?\n\n(Not: Akıllı sözleşme aktif edildiğinde bu işlem cüzdanınızdan transfer tetikleyecektir.)");
+        if (onay) {
+            alert("Simülasyon Başarılı!\nSözleşme bağlandığında 10 USDT bakiyeniz işlenecek ve günlük %3 kazanç başlayacaktır.");
+        }
+    }
+}
+
+// DAVET LİNKİ KOPYALAMA FONKSİYONU
+function linkKopyala() {
+    const copyText = document.getElementById("ref-link");
+    
+    // Metni seç
+    copyText.select();
+    copyText.setSelectionRange(0, 99999); // Mobil cihaz uyumluluğu için
+
+    // Panoya kopyala
+    navigator.clipboard.writeText(copyText.value)
+        .then(() => {
+            alert("Davet linkiniz başarıyla kopyalandı! Arkadaşlarınızla paylaşabilirsiniz: " + copyText.value);
+        })
+        .catch(err => {
+            alert("Kopyalama başarısız oldu, lütfen manuel kopyalayın.");
+        });
+}
+
+// GEÇİCİ CÜZDAN BAĞLANTI SİMÜLASYONU (Arayüz Geliştirme İçin)
+document.getElementById('btn-connect').addEventListener('click', function() {
+    const buton = this;
+    if (buton.innerText.includes('Connect Wallet')) {
+        buton.innerHTML = '💎 0x7a...b4f9';
+        document.getElementById('cuzdan-adres').innerText = '0x7a8c...b4f9 (TON Wallet)';
+        alert("Cüzdan simüle olarak bağlandı!");
+    } else {
+        buton.innerHTML = '💎 Connect Wallet';
+        document.getElementById('cuzdan-adres').innerText = 'Cüzdan Bağlı Değil';
+    }
+});
