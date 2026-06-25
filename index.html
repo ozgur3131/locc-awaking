@@ -2,274 +2,121 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>BeastForge TON Game</title>
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mining in Azeroth</title>
+    <link rel="stylesheet" href="style.css">
     <script src="https://unpkg.com/@tonconnect/ui@latest/dist/tonconnect-ui.min.js"></script>
-    
-    <style>
-        :root {
-            --bg-color: #121016;
-            --panel-bg: #1e1b26;
-            --panel-light: #2d2838;
-            --accent: #8b5cf6;
-            --accent-hover: #7c3aed;
-            --text-main: #ffffff;
-            --text-muted: #a09dab;
-            --hp-bar: #ef4444;
-            --success: #10b981;
-        }
-
-        body {
-            margin: 0;
-            padding: 0;
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            display: flex;
-            flex-direction: column;
-            height: 100vh;
-            overflow: hidden;
-            user-select: none;
-        }
-
-        /* Üst Bilgi Çubuğu */
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px;
-            background-color: var(--panel-bg);
-            border-bottom: 1px solid #333;
-        }
-
-        .player-info { display: flex; flex-direction: column; }
-        .player-name { font-weight: bold; font-size: 1.1rem; }
-        .currency { color: #fbbf24; font-weight: bold; margin-top: 5px; font-size: 0.9rem;}
-
-        /* Sekme İçerikleri */
-        .tab-content {
-            flex: 1;
-            overflow-y: auto;
-            padding: 15px;
-            display: none; /* Varsayılan olarak gizli */
-        }
-
-        .tab-content.active {
-            display: block; /* Sadece aktif olan görünür */
-        }
-
-        /* Savaş Alanı Tasarımı */
-        .battle-area { text-align: center; margin-top: 30px; }
-        .boss-name { font-size: 1.5rem; margin-bottom: 10px; color: #fca5a5; }
-        .boss-image {
-            width: 150px; height: 150px;
-            background: radial-gradient(circle, #4c1d95 0%, #121016 70%);
-            border-radius: 50%; margin: 0 auto 20px auto;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 3rem; animation: pulse 2s infinite;
-        }
-        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
-        
-        .hp-container {
-            width: 100%; max-width: 300px; margin: 0 auto;
-            background-color: #333; border-radius: 10px; height: 20px;
-            position: relative; overflow: hidden; border: 2px solid #555;
-        }
-        .hp-bar { height: 100%; background-color: var(--hp-bar); width: 100%; transition: width 0.2s; }
-        .hp-text { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 0.8rem; font-weight: bold; text-shadow: 1px 1px 2px black; }
-
-        /* Pazar (Market) Tasarımı */
-        .market-title { text-align: center; margin-bottom: 20px; font-size: 1.2rem; color: var(--accent); }
-        .nft-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            padding-bottom: 20px;
-        }
-        .nft-card {
-            background-color: var(--panel-bg);
-            border: 1px solid #444;
-            border-radius: 12px;
-            padding: 10px;
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
-        .nft-icon { font-size: 2.5rem; margin-bottom: 5px; }
-        .nft-name { font-weight: bold; font-size: 0.9rem; margin-bottom: 5px; }
-        .nft-stats { font-size: 0.75rem; color: var(--text-muted); text-align: left; margin-bottom: 10px; background: var(--panel-light); padding: 5px; border-radius: 6px;}
-        .nft-stats span { display: block; margin-bottom: 2px; }
-        .nft-price { color: var(--success); font-weight: bold; margin-bottom: 10px; font-size: 0.9rem;}
-        
-        .btn-buy {
-            background-color: var(--accent); color: white; border: none; padding: 8px;
-            border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 0.8rem;
-            transition: 0.2s;
-        }
-        .btn-buy:active { background-color: var(--accent-hover); transform: scale(0.95); }
-        .btn-free { background-color: var(--success); }
-
-        /* Alt Menü */
-        .bottom-nav {
-            display: flex;
-            justify-content: space-around;
-            padding: 15px 0;
-            background-color: var(--panel-bg);
-            border-top: 1px solid #333;
-        }
-        .nav-item {
-            display: flex; flex-direction: column; align-items: center;
-            color: var(--text-muted); font-size: 0.8rem; cursor: pointer;
-        }
-        .nav-item.active { color: var(--accent); font-weight: bold; }
-    </style>
 </head>
 <body>
 
     <div class="header">
-        <div class="player-info">
-            <span class="player-name" id="playerName">Yükleniyor...</span>
-            <span class="currency">💰 <span id="usdtBalance">0.00</span> USDT</span>
+        <div class="user-info">
+            <h2>Raff</h2>
+            <div class="user-balance">
+                <span class="wallet-icon">💰</span>
+                <span id="header-usdt">0.00 USDT</span>
+            </div>
         </div>
-        <div id="ton-connect"></div>
+        <div id="ton-connect-button-root"></div>
     </div>
 
-    <div id="tab-battle" class="tab-content active">
-        <div class="battle-area">
-            <div class="boss-name">🔥 KINDRAL 🔥</div>
-            <div class="boss-image">👹</div>
-            <div class="hp-container">
-                <div class="hp-bar" id="hpBar"></div>
-                <div class="hp-text" id="hpText">1,800,000 / 1,800,000 HP</div>
+    <div class="main-content">
+        
+        <div id="pazar-page" class="page-section">
+            <div class="mining-card border-nadir">
+                <h3>Nadir</h3>
+                <div class="price text-nadir">30 USDT</div>
+                <div class="card-details">
+                    <p>⏱ Süre: 50 Gün</p>
+                    <p>📈 Günlük: %3.3 (0.99$)</p>
+                    <p>💰 Toplam: 49.5 USDT</p>
+                </div>
+                <button class="buy-btn bg-nadir" onclick="buyWithUSDT(30)">30 USDT ile Al</button>
             </div>
-            <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 20px;">Savaş mekanikleri arka planda devam ediyor. Pazar'dan NFT alarak USDT üretimine başla!</p>
+
+            <div class="mining-card border-epik">
+                <h3>Epik</h3>
+                <div class="price text-epik">50 USDT</div>
+                <div class="card-details">
+                    <p>⏱ Süre: 50 Gün</p>
+                    <p>📈 Günlük: %3.7 (1.85$)</p>
+                    <p>💰 Toplam: 92.5 USDT</p>
+                </div>
+                <button class="buy-btn bg-epik" onclick="buyWithUSDT(50)">50 USDT ile Al</button>
+            </div>
+
+            <div class="mining-card border-efsanevi highlight-card">
+                <div class="dragon-icon">🐉</div>
+                <h3>Efsanevi</h3>
+                <div class="price text-efsanevi">100 USDT</div>
+                <div class="card-details">
+                    <p>⏱ Üretim Süresi: 50 Gün</p>
+                    <p>📈 Günlük Kazanç: %4 (4.00 USDT)</p>
+                    <p>💰 Toplam Getiri: 200 USDT</p>
+                </div>
+                <button class="buy-btn bg-efsanevi" onclick="buyWithUSDT(100)">100 USDT ile Al</button>
+            </div>
+        </div>
+
+        <div id="savas-page" class="page-section hidden">
+            <div class="placeholder-screen">
+                ⚔️ Savaş Arenası Yakında Sizlerle!
+            </div>
+        </div>
+
+        <div id="wallet-page" class="page-section hidden">
+            <div class="wallet-container">
+                <h3>Cüzdan Hesabım</h3>
+                
+                <div class="balance-box">
+                    <div class="balance-item">
+                        <span class="label">Toplam Bakiye:</span>
+                        <span class="value"><span id="total-balance">0.00</span> USDT</span>
+                    </div>
+                    <div class="balance-item Highlight-withdrawable">
+                        <span class="label">Çekilebilir Bakiye:</span>
+                        <span class="value"><span id="withdrawable-balance">2.50</span> USDT</span>
+                    </div>
+                </div>
+
+                <div class="wallet-actions">
+                    <button class="action-btn btn-deposit" onclick="depositUSDT()">USDT Yatır</button>
+                    <button class="action-btn btn-withdraw" onclick="withdrawUSDT()">Çek</button>
+                </div>
+
+                <div class="history-container">
+                    <h4>Daha Önceki Çekimler</h4>
+                    <ul id="withdrawal-history" class="history-list">
+                        <li>
+                            <span class="hist-date">24.06.2026 14:20</span>
+                            <span class="hist-amount status-success">-5.00 USDT</span>
+                        </li>
+                        <li>
+                            <span class="hist-date">20.06.2026 09:15</span>
+                            <span class="hist-amount status-success">-12.50 USDT</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="navbar">
+        <div class="nav-item" onclick="switchPage('savas-page')">
+            <span class="nav-icon">⚔️</span>
+            <span>Savaş</span>
+        </div>
+        <div class="nav-item active" id="nav-pazar" onclick="switchPage('pazar-page')">
+            <span class="nav-icon">🛒</span>
+            <span>Pazar</span>
+        </div>
+        <div class="nav-item" id="nav-wallet" onclick="switchPage('wallet-page')">
+            <span class="nav-icon">💼</span>
+            <span>Cüzdan</span>
         </div>
     </div>
 
-    <div id="tab-market" class="tab-content">
-        <div class="market-title">Kahraman Pazar Yeri</div>
-        <div class="nft-grid">
-            
-            <div class="nft-card">
-                <div class="nft-icon">🧝🏽‍♂️</div>
-                <div class="nft-name">Sıradan</div>
-                <div class="nft-price">Ücretsiz</div>
-                <div class="nft-stats">
-                    <span>⏱ Süre: 20 Gün</span>
-                    <span>📈 Günlük: 0.05 USDT</span>
-                    <span>💰 Toplam: 1.00 USDT</span>
-                </div>
-                <button class="btn-buy btn-free" onclick="buyNFT('Sıradan', 0)">Ücretsiz Al</button>
-            </div>
-
-            <div class="nft-card">
-                <div class="nft-icon">🧝🏽‍♀️</div>
-                <div class="nft-name">Az Bulunur</div>
-                <div class="nft-price">10 USDT</div>
-                <div class="nft-stats">
-                    <span>⏱ Süre: 50 Gün</span>
-                    <span>📈 Günlük: %3 (0.3$)</span>
-                    <span>💰 Toplam: 15 USDT</span>
-                </div>
-                <button class="btn-buy" onclick="buyNFT('Az Bulunur', 10)">10 TON/USDT ile Al</button>
-            </div>
-
-            <div class="nft-card">
-                <div class="nft-icon">🧙‍♂️</div>
-                <div class="nft-name">Nadir</div>
-                <div class="nft-price">30 USDT</div>
-                <div class="nft-stats">
-                    <span>⏱ Süre: 50 Gün</span>
-                    <span>📈 Günlük: %3.3 (0.99$)</span>
-                    <span>💰 Toplam: 49.5 USDT</span>
-                </div>
-                <button class="btn-buy" onclick="buyNFT('Nadir', 30)">30 TON/USDT ile Al</button>
-            </div>
-
-            <div class="nft-card">
-                <div class="nft-icon">🧛🏻</div>
-                <div class="nft-name">Epik</div>
-                <div class="nft-price">50 USDT</div>
-                <div class="nft-stats">
-                    <span>⏱ Süre: 50 Gün</span>
-                    <span>📈 Günlük: %3.7 (1.85$)</span>
-                    <span>💰 Toplam: 92.5 USDT</span>
-                </div>
-                <button class="btn-buy" onclick="buyNFT('Epik', 50)">50 TON/USDT ile Al</button>
-            </div>
-
-            <div class="nft-card" style="grid-column: span 2; border-color: #fbbf24; background: linear-gradient(180deg, #1e1b26 0%, #3a2e12 100%);">
-                <div class="nft-icon">🐉</div>
-                <div class="nft-name" style="color: #fbbf24;">Efsanevi</div>
-                <div class="nft-price">100 USDT</div>
-                <div class="nft-stats" style="text-align: center; font-size: 0.85rem;">
-                    <span>⏱ Üretim Süresi: 50 Gün</span>
-                    <span>📈 Günlük Kazanç: %4 (4.00 USDT)</span>
-                    <span style="color: #fbbf24; font-weight: bold; margin-top: 5px;">💰 Toplam Getiri: 200 USDT</span>
-                </div>
-                <button class="btn-buy" style="background-color: #fbbf24; color: black;" onclick="buyNFT('Efsanevi', 100)">100 TON/USDT ile Al</button>
-            </div>
-
-        </div>
-    </div>
-
-    <div class="bottom-nav">
-        <div class="nav-item active" onclick="switchTab('tab-battle', this)">⚔️ Savaş</div>
-        <div class="nav-item" onclick="switchTab('tab-market', this)">🛒 Pazar</div>
-        <div class="nav-item">🗃️ Koleksiyon</div>
-    </div>
-
-    <script>
-        // Telegram Web App Başlatma
-        const tg = window.Telegram.WebApp;
-        tg.expand();
-
-        // Kullanıcı adını belirleme
-        if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
-            document.getElementById("playerName").innerText = tg.initDataUnsafe.user.first_name;
-        } else {
-            document.getElementById("playerName").innerText = "Ayşe";
-        }
-
-        // TON Connect UI Başlatma
-        // (Gerçek bir uygulamada manifestUrl senin kendi domain'inde barınan bir JSON dosyası olmalıdır)
-        const tonConnectUI = new TON_CONNECT_UI.TonConnectUI({
-            manifestUrl: 'https://raw.githubusercontent.com/ton-community/tutorials/main/03-client/test/public/tonconnect-manifest.json',
-            buttonRootId: 'ton-connect'
-        });
-
-        // Sekme Geçiş Mantığı
-        function switchTab(tabId, element) {
-            // Tüm sekmeleri gizle
-            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
-            // Tıklanan sekmeyi göster
-            document.getElementById(tabId).classList.add('active');
-            
-            // Menü renklerini sıfırla
-            document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
-            // Tıklanan menüyü vurgula
-            element.classList.add('active');
-            
-            tg.HapticFeedback.impactOccurred('light');
-        }
-
-        // Satın Alma Fonksiyonu (Geçici Simülasyon)
-        function buyNFT(nftName, price) {
-            // Eğer cüzdan bağlı değilse uyarı ver
-            if (!tonConnectUI.wallet) {
-                tg.showAlert("Lütfen önce sağ üstten TON cüzdanınızı bağlayın.");
-                return;
-            }
-
-            // Cüzdan bağlıysa onay penceresi aç (Akıllı sözleşme entegrasyonu buraya gelecek)
-            tg.showConfirm(`${nftName} kahramanını ${price > 0 ? price + ' USDT karşılığında' : 'ücretsiz'} almak istediğine emin misin? (İleride burada TON cüzdanı onay ekranı açılacak)`, (agreed) => {
-                if(agreed) {
-                    tg.showAlert(`Tebrikler Ayşe! ${nftName} kahramanı koleksiyonuna eklendi ve USDT üretimine başladı.`);
-                }
-            });
-        }
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
